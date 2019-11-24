@@ -630,6 +630,7 @@ include Makefile.custom
 include Makefile.2560
 include Makefile.tiny
 include Makefile.MCUdude
+include Makefile.lora328
 
 BAUDCHECK=
 ifndef PRODUCTION

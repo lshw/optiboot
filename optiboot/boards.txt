@@ -113,6 +113,24 @@ pro328o.build.variant=arduino:standard
 
 ##############################################################
 
+lora328.name=[Optiboot] Arduino Pro lora 328 (3.3V, 8 MHz) w/ ATmega328
+lora328.upload.protocol=arduino
+lora328.upload.maximum_size=15872
+lora328.upload.speed=57600
+lora328.bootloader.low_fuses=0xC2
+lora328.bootloader.high_fuses=0xDC
+lora328.bootloader.extended_fuses=0xFF
+lora328.bootloader.path=optiboot
+lora328.bootloader.file=optiboot_atmega328_lora.hex
+lora328.bootloader.unlock_bits=0x3F
+lora328.bootloader.lock_bits=0x0F
+lora328.build.mcu=atmega328p
+lora328.build.f_cpu=8000000L
+lora328.build.core=arduino:arduino
+lora328.build.variant=arduino:standard
+
+##############################################################
+
 proo.name=[Optiboot] Arduino Pro or Pro Mini (3.3V, 8 MHz) w/ ATmega168
 proo.upload.protocol=arduino
 proo.upload.maximum_size=15872

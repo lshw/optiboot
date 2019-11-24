@@ -405,6 +405,7 @@ typedef uint8_t pagelen_t;
  * supress some compile-time options we want.)
  */
 
+int cp_high_rom(void);
 void pre_main(void) __attribute__ ((naked)) __attribute__ ((section (".init8")));
 int main(void) __attribute__ ((OS_main)) __attribute__ ((section (".init9"))) __attribute__((used));
 
@@ -706,7 +707,9 @@ int main(void) {
   LED_PORT |= _BV(LED);
 #endif
 #endif
-
+#if (FLASHEND>20000) && BIGBOOT
+cp_high_rom();
+#endif
   /* Forever loop: exits by causing WDT reset */
   for (;;) {
     /* get character from UART */
@@ -1346,7 +1349,47 @@ static void do_spm(uint16_t address, uint8_t command, uint16_t data) {
 }
 #endif
 
+#if (FLASHEND>20000) && BIGBOOT
+int cp_high_rom(void) {
+  uint16_t addc=0;
+  addr16_t app_size,addc1,fa;
+  uint16_t romSize=((uint16_t)pre_main & 0xfe00)/2;//可用的rom大小(328->15872)
 
+//eeprom[0]='L',eeprom[1]='S',uint16_t eeprom[2-3]是程序大小，uint16_t eeprom[4-5]是字节累加和
+//符合累加和就开始从高位向地位搬
+  if(eeprom_read_byte((uint8_t *)0) != 'L' || eeprom_read_byte((uint8_t *) 1) != 'S')
+    return 0;
+  app_size.bytes[0]=eeprom_read_byte((uint8_t *)2);
+  app_size.bytes[1]=eeprom_read_byte((uint8_t *)3);
+
+  for(addc1.word=0;addc1.word<app_size.word;addc1.word++)
+    addc+=pgm_read_byte(addc1.word+romSize);
+
+  addc1.bytes[0]=eeprom_read_byte((uint8_t *)4);
+  addc1.bytes[1]=eeprom_read_byte((uint8_t *)5);
+
+  if(addc!=addc1.word) return 0;
+  if((app_size.word%SPM_PAGESIZE)!=0) {
+    app_size.word=app_size.word/SPM_PAGESIZE;
+    app_size.word++;
+    app_size.word=app_size.word*SPM_PAGESIZE;
+  }
+  for (fa.word = 0; fa.word < app_size.word; fa.word += SPM_PAGESIZE) {
+    addc1.word=0;
+    for(uint16_t i=0;i<SPM_PAGESIZE;i++) {
+      buff.bptr[i]=pgm_read_byte(fa.word+i+romSize);
+      if(pgm_read_byte(fa.word+i)!=buff.bptr[i]) addc1.word=1;
+    }
+    if(addc1.word==0) continue;
+    writebuffer('F', buff, fa, SPM_PAGESIZE);
+  }
+  eeprom_write_byte((uint8_t *)0,0xff);
+  eeprom_write_byte((uint8_t *)1,0xff);
+
+  flash_led(10);
+  return 0;
+}
+#endif
 
 #ifdef BIGBOOT
 /*
@@ -1370,7 +1413,7 @@ static void do_spm(uint16_t address, uint8_t command, uint16_t data) {
 
 
 #ifdef LED_START_FLASHES
-OPT2FLASH(LED_START_FLASHES);
+//OPT2FLASH(LED_START_FLASHES);
 #endif
 #ifdef LED_DATA_FLASH
 OPT2FLASH(LED_DATA_FLASH);
@@ -1395,7 +1438,7 @@ OPT2FLASH(SOFT_UART);
 OPT2FLASH(UART);
 #endif
 
-OPTFLASHSECT const char f_date[] = "Built:" __DATE__ ":" __TIME__;
+//OPTFLASHSECT const char f_date[] = "Built:" __DATE__ ":" __TIME__;
 #ifdef BIGBOOT
 OPT2FLASH(BIGBOOT);
 #endif
@@ -1405,7 +1448,7 @@ OPTFLASHSECT const char f_boot[] = "Virtual_Boot_Partition";
 OPT2FLASH(F_CPU);
 OPTFLASHSECT const char f_device[] = "Device=" xstr(__AVR_DEVICE_NAME__);
 #ifdef OPTIBOOT_CUSTOMVER
-OPT2FLASH(OPTIBOOT_CUSTOMVER);
+//OPT2FLASH(OPTIBOOT_CUSTOMVER);
 #endif
 OPTFLASHSECT const char f_version[] = "Version=" xstr(OPTIBOOT_MAJVER) "." xstr(OPTIBOOT_MINVER);
 

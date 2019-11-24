@@ -13,7 +13,7 @@
     {
       "name": "Optiboot",
       "maintainer": "westfw",
-      "websiteURL": "https://github.com/Optiboot/optiboot",
+      "websiteURL": "https://github.com/lshw/optiboot",
       "email": "",
       "help": {
         "online": ""
@@ -28,9 +28,9 @@
 #
           "category": "Contributed",
           "help": {
-	    "online": "https://github.com/Optiboot/optiboot/wiki"
+	    "online": "https://github.com/lshw/optiboot/wiki"
           },
-          "url": "https://github.com/Optiboot/optiboot/releases/download/v%VERSION%/Optiboot-%VERSION%.zip",
+          "url": "https://github.com/lshw/optiboot/releases/download/v%VERSION%/Optiboot-%VERSION%.zip",
           "archiveFileName": "optiboot-%VERSION%.zip",
 #
 # Package file verification data

@@ -2,6 +2,9 @@
 
 ![docs/optiboot.png](docs/optiboot.png)
 
+对于rom大于20k，并且开启了BIGBOOT的1k大小的bootloader , 增加了自升级功能，启用这个功能的条件是
+程序体积不能大于原来rom大小的1/2，把程序写入到高一半的rom空间[0x3e00],在eeprom[0]写L，在eeprom[1]写'S', [2-3]是程序体积字节,[4-5]是程序每个字节数据的累加，符合上面的条件， 进行重启(看门狗)，就会开始把程序从高一半，复制到低一半空间，实现update.  
+
 Optiboot is an easy to install upgrade to the Arduino bootloader within Arduino boards. It provides the following features:
 
   * Allows larger sketches. Optiboot is only 512 bytes, freeing 1.5k of extra code space compared to older bootloaders.

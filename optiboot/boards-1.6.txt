@@ -72,6 +72,20 @@ optiboot28.menu.cpu.atmega328.bootloader.file=optiboot/optiboot_atmega328.hex
 optiboot28.menu.cpu.atmega328.build.mcu=atmega328p
 
 
+## Optiboot lora for ATmega328
+## ---------------------------------------------
+optiboot28.menu.cpu.atmega328_lora=ATmega328
+optiboot28.menu.cpu.atmega328_lora.upload.maximum_size=15872
+optiboot28.menu.cpu.atmega328_lora.upload.maximum_data_size=2048
+optiboot28.menu.cpu.atmega328_lora.upload.speed=57600
+
+optiboot28.menu.cpu.atmega328_lora.bootloader.low_fuses=0xC2
+optiboot28.menu.cpu.atmega328_lora.bootloader.high_fuses=0xDC
+optiboot28.menu.cpu.atmega328_lora.bootloader.extended_fuses=0xFF
+optiboot28.menu.cpu.atmega328_lora.bootloader.file=optiboot/optiboot_atmega328_lora.hex
+optiboot28.menu.cpu.atmega328_lora.build.mcu=atmega328p
+optiboot28.menu.cpu.atmega328_lora.build.f_cpu=8000000L
+
 ## Optiboot ATmega168
 ## ---------------------------------------------
 optiboot28.menu.cpu.atmega168=ATmega168
