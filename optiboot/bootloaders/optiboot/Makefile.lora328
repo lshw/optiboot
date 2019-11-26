@@ -2,10 +2,10 @@
 HELPTEXT += "target atmega328_lora*    - ATmega328, ATmega328p, ATmega328pb\n"
 atmega328_lora: TARGET = atmega328
 atmega328_lora: MCU_TARGET = atmega328p
-atmega328_lora: CFLAGS += $(COMMON_OPTIONS) -DBIGBOOT -DBAUD_RATE=57600
+atmega328_lora: CFLAGS += $(COMMON_OPTIONS) -DBAUD_RATE=57600
 atmega328_lora: AVR_FREQ ?= 8000000L
 # bigboot version is 1k long; starts earlier
-atmega328_lora: LDSECTIONS  = -Wl,--section-start=.text=0x7c00 -Wl,--section-start=.version=0x7ffe
+atmega328_lora: LDSECTIONS  = -Wl,--section-start=.text=0x7e00 -Wl,--section-start=.version=0x7ffe
 atmega328_lora: $(PROGRAM)_atmega328_lora.hex
 atmega328_lora: $(PROGRAM)_atmega328_lora.lst
 
@@ -13,7 +13,7 @@ atmega328_lora_isp: atmega328
 atmega328_lora_isp: TARGET = atmega328
 atmega328_lora_isp: MCU_TARGET = atmega328p
 # 1k byte boot, SPIEN
-atmega328_lora_isp: HFUSE ?= DC
+atmega328_lora_isp: HFUSE ?= DE
 # RC(8Mhz)  6KCK/14CK+0ms
 atmega328_lora_isp: LFUSE ?= C2
 # 电压诊断关闭
